@@ -24,20 +24,20 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive;
+  private final DriveSubsystem robotDrive;
 
   // The driver's controller
-  private final XboxController m_driverController;
+  private final XboxController driverController;
 
   // A chooser for autonomous commands
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  SendableChooser<Command> chooser = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_robotDrive = new DriveSubsystem();
-    m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    robotDrive = new DriveSubsystem();
+    driverController = new XboxController(OIConstants.kDriverControllerPort);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -45,23 +45,23 @@ public class RobotContainer {
     configureAutonomousChooser();
 
     // Configure default commands
-    m_robotDrive.setDefaultCommand(
+    robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), 0.1),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), 0.1),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), 0.1)),
-            m_robotDrive));
+            () -> robotDrive.drive(
+                -MathUtil.applyDeadband(driverController.getLeftY(), 0.1),
+                -MathUtil.applyDeadband(driverController.getLeftX(), 0.1),
+                -MathUtil.applyDeadband(driverController.getRightX(), 0.1)),
+            robotDrive));
   }
 
   private void configureAutonomousChooser() {
     // Add commands to the autonomous command chooser
-   // m_chooser.addOption("Simple Path", AutonomousCommandHelper.getSimplAutonomousCommand(m_robotDrive));
+   // chooser.addOption("Simple Path", AutonomousCommandHelper.getSimplAutonomousCommand(robotDrive));
 
     // Put the chooser on the dashboard
-    SmartDashboard.putData(m_chooser);
+    SmartDashboard.putData(chooser);
   }
 
   /**
@@ -75,20 +75,20 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(m_driverController, Button.kA.value)
-        .whenPressed(() -> m_robotDrive.zeroHeading());
+    new JoystickButton(driverController, Button.kA.value)
+        .whenPressed(() -> robotDrive.zeroHeading());
 
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whenPressed(() -> m_robotDrive.setTurboMode(true))
-        .whenReleased(() -> m_robotDrive.setTurboMode(false));
+    new JoystickButton(driverController, Button.kRightBumper.value)
+        .whenPressed(() -> robotDrive.setTurboMode(true))
+        .whenReleased(() -> robotDrive.setTurboMode(false));
 
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
-        .whenPressed(() -> m_robotDrive.setFieldRelative(false))
-        .whenReleased(() -> m_robotDrive.setFieldRelative(true));
+    new JoystickButton(driverController, Button.kLeftBumper.value)
+        .whenPressed(() -> robotDrive.setFieldRelative(false))
+        .whenReleased(() -> robotDrive.setFieldRelative(true));
 
-    new Trigger(() -> { return m_driverController.getRightTriggerAxis() > 0.75;})
-        .whenActive(() -> m_robotDrive.setTurboMode(true))
-        .whenInactive(() -> m_robotDrive.setTurboMode(false));
+    new Trigger(() -> { return driverController.getRightTriggerAxis() > 0.75;})
+        .whenActive(() -> robotDrive.setTurboMode(true))
+        .whenInactive(() -> robotDrive.setTurboMode(false));
   }
 
   private void configureTriggers() {
@@ -100,7 +100,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+    return chooser.getSelected();
   }
 
   public void autonomousInit() {

@@ -14,9 +14,9 @@ public abstract class MeasuredSubsystem extends SubsystemBase {
   static final double k_uS_to_mS = 1000.0; // microseconds
   
   static Map<String, MeasuredSubsystem> s_map = new ConcurrentHashMap<String, MeasuredSubsystem>();
-  static boolean s_enabled = true;
-  static long s_resetTime;
-  static long s_lastEndTime;
+  static boolean enabled = true;
+  static long resetTime;
+  static long lastEndTime;
 
   long min;
   long max;
@@ -33,15 +33,15 @@ public abstract class MeasuredSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (!s_enabled) {
+    if (!enabled) {
       monitored_periodic();
       return;
     }
     long startTime = RobotController.getFPGATime();
     count++;
     monitored_periodic();
-    s_lastEndTime = RobotController.getFPGATime();
-    long time = s_lastEndTime - startTime;
+    lastEndTime = RobotController.getFPGATime();
+    long time = lastEndTime - startTime;
     
     //save the stats
     total += time;
@@ -76,8 +76,8 @@ public abstract class MeasuredSubsystem extends SubsystemBase {
     long fcount = s_map.values().stream().findFirst().get().count;
     
     s.append("\n***********************************************************\n");
-    s.append(String.format("Total run time: %05.5f seconds.\n", (s_lastEndTime - s_resetTime) / 1e6));
-    s.append(String.format("Estimated frame period: %05.5f milli-seconds.\n\n", (s_lastEndTime - s_resetTime) / k_uS_to_mS / fcount));
+    s.append(String.format("Total run time: %05.5f seconds.\n", (lastEndTime - resetTime) / 1e6));
+    s.append(String.format("Estimated frame period: %05.5f milli-seconds.\n\n", (lastEndTime - resetTime) / k_uS_to_mS / fcount));
     for (String k : s_map.keySet()) { 
       s.append(s_map.get(k).toString());
     }
@@ -89,11 +89,11 @@ public abstract class MeasuredSubsystem extends SubsystemBase {
     for (String k : s_map.keySet()) { 
      s_map.get(k).resetStats();
     }
-    s_resetTime = RobotController.getFPGATime();
+    resetTime = RobotController.getFPGATime();
   }
 
-  public static void setEnabled(boolean enabled) {
-    s_enabled = enabled;
+  public static void setEnabled(boolean enabled_param) {
+    enabled = enabled_param;
   }
 
 }
