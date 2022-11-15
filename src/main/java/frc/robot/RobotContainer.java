@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -26,6 +27,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem robotDrive;
 
+  private final VisionSubsystem visionSubsystem;
+
   // The driver's controller
   private final XboxController driverController;
 
@@ -37,6 +40,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     robotDrive = new DriveSubsystem();
+    visionSubsystem = new VisionSubsystem();
     driverController = new XboxController(OIConstants.kDriverControllerPort);
 
     // Configure the button bindings
