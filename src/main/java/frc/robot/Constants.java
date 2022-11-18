@@ -9,15 +9,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
+ * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
@@ -65,11 +61,12 @@ public final class Constants {
     // Wheel Base Distance between front and back wheels on robot
     public static final double kWheelBase = 0.311;
 
-    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-        new Translation2d(kWheelBase / 2, kTrackWidth / 2), // front left
-        new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // front right
-        new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // back left
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); // back right
+    public static final SwerveDriveKinematics kDriveKinematics =
+        new SwerveDriveKinematics(
+            new Translation2d(kWheelBase / 2, kTrackWidth / 2), // front left
+            new Translation2d(kWheelBase / 2, -kTrackWidth / 2), // front right
+            new Translation2d(-kWheelBase / 2, kTrackWidth / 2), // back left
+            new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); // back right
 
     public static final boolean kGyroReversed = false;
 
@@ -85,22 +82,25 @@ public final class Constants {
 
     public static final double kMaxSpeedMetersPerSecond = 5;
     public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
-    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
+    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond =
+        kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 10;
   }
 
   public static final class SwerveModuleConstants {
     public static final boolean kSwerveModuleDebugMode = false;
-    
+
     public static final double kMaxModuleAngularSpeedRadiansPerSecond = 2 * Math.PI * 4;
-    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared = 2 * Math.PI * 16;
+    public static final double kMaxModuleAngularAccelerationRadiansPerSecondSquared =
+        2 * Math.PI * 16;
 
     // public static final int kEncoderCPR = 1024;
     public static final int kEncoderCPR = 42;
     public static final double kWheelDiameterMeters = 0.100; // Units.inchesToMeters(4);// 0.1016;
     public static final double kDriveGearReduction = 6.67 / 1.0;
-    public static final double kDriveEncoderRotationsPerMeter = kWheelDiameterMeters * Math.PI / kDriveGearReduction;
+    public static final double kDriveEncoderRotationsPerMeter =
+        kWheelDiameterMeters * Math.PI / kDriveGearReduction;
     public static final double kDriveEncoderDistancePerPulse =
         // Assumes the encoders are directly mounted on the wheel shafts
         (kWheelDiameterMeters * Math.PI) * kDriveGearReduction / (double) kEncoderCPR;
@@ -130,8 +130,9 @@ public final class Constants {
     public static final double kPThetaController = 8; // 32; // 32 worked at low speed
 
     // Constraint for the motion profilied robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+        new TrapezoidProfile.Constraints(
+            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
 
     // PID values for the rotation in the TargetDrive command
     public static final double kPTargetTurn = .02;

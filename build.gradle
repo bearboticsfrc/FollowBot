@@ -3,10 +3,31 @@ import edu.wpi.first.gradlerio.deploy.roborio.RoboRIO
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2022.4.1"
+    id "com.diffplug.spotless" version "6.11.0"
 }
 
 repositories {
   maven { url 'https://jitpack.io' }
+}
+
+spotless {
+   java {
+      target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**'
+      }
+      toggleOffOn()
+      googleJavaFormat()
+      removeUnusedImports()
+      trimTrailingWhitespace()
+      endWithNewline()
+   }
+}
+
+// Apparently this is bad practice. 
+// I'll have a discusson on if we want to do this or not.
+afterEvaluate {
+    tasks.getByName('spotlessCheck').dependsOn(tasks.getByName('spotlessApply'))
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -72,7 +93,6 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'junit:junit:4.12'
-    implementation "com.github.Oblarg:Oblog:3.0.3"
 }
 
 // Simulation configuration (e.g. environment variables).

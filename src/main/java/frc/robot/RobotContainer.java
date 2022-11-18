@@ -9,13 +9,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.Follow;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -29,19 +30,19 @@ public class RobotContainer {
 
   private final VisionSubsystem visionSubsystem;
 
+  private final Follow followCommand;
   // The driver's controller
   private final XboxController driverController;
 
   // A chooser for autonomous commands
   SendableChooser<Command> chooser = new SendableChooser<>();
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     robotDrive = new DriveSubsystem();
     visionSubsystem = new VisionSubsystem();
     driverController = new XboxController(OIConstants.kDriverControllerPort);
+    followCommand = new Follow(robotDrive, visionSubsystem);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -53,31 +54,32 @@ public class RobotContainer {
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
-            () -> robotDrive.drive(
-                -MathUtil.applyDeadband(driverController.getLeftY(), 0.1),
-                -MathUtil.applyDeadband(driverController.getLeftX(), 0.1),
-                -MathUtil.applyDeadband(driverController.getRightX(), 0.1)),
+            () ->
+                robotDrive.drive(
+                    -MathUtil.applyDeadband(driverController.getLeftY(), 0.1),
+                    -MathUtil.applyDeadband(driverController.getLeftX(), 0.1),
+                    -MathUtil.applyDeadband(driverController.getRightX(), 0.1)),
             robotDrive));
   }
 
   private void configureAutonomousChooser() {
     // Add commands to the autonomous command chooser
-   // chooser.addOption("Simple Path", AutonomousCommandHelper.getSimplAutonomousCommand(robotDrive));
+    // chooser.addOption("Simple Path",
+    // AutonomousCommandHelper.getSimplAutonomousCommand(robotDrive));
 
     // Put the chooser on the dashboard
     SmartDashboard.putData(chooser);
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-   * passing it to a
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    new JoystickButton(driverController, Button.kX.value).toggleWhenPressed(followCommand);
 
     new JoystickButton(driverController, Button.kA.value)
         .whenPressed(() -> robotDrive.zeroHeading());
@@ -90,13 +92,15 @@ public class RobotContainer {
         .whenPressed(() -> robotDrive.setFieldRelative(false))
         .whenReleased(() -> robotDrive.setFieldRelative(true));
 
-    new Trigger(() -> { return driverController.getRightTriggerAxis() > 0.75;})
+    new Trigger(
+            () -> {
+              return driverController.getRightTriggerAxis() > 0.75;
+            })
         .whenActive(() -> robotDrive.setTurboMode(true))
         .whenInactive(() -> robotDrive.setTurboMode(false));
   }
 
-  private void configureTriggers() {
-  }
+  private void configureTriggers() {}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -107,16 +111,11 @@ public class RobotContainer {
     return chooser.getSelected();
   }
 
-  public void autonomousInit() {
-  }
+  public void autonomousInit() {}
 
-  public void teleopInit() {
-  }
+  public void teleopInit() {}
 
-  public void disabledInit() {
-  }
+  public void disabledInit() {}
 
-  public void periodic() {
-  }
-
+  public void periodic() {}
 }

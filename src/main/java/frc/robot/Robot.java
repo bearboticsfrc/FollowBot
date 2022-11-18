@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
 
     // The first argument is the root container
     // The second argument is whether logging and config should be given separate tabs
-    //Logger.configureLoggingAndConfig(robotContainer, false);
+    // Logger.configureLoggingAndConfig(robotContainer, false);
   }
 
   /**
@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    //Logger.updateEntries();
+    // Logger.updateEntries();
     robotContainer.periodic();
   }
 
