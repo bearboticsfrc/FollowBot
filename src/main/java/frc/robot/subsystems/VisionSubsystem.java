@@ -14,6 +14,7 @@ public class VisionSubsystem extends SubsystemBase {
   private boolean validTargets = false;
   private double xMeters = 0.0;
   private double ambiguity = 0.0;
+
   public VisionSubsystem() {
     camera = new PhotonCamera("mmal_service_16.1");
   }
@@ -34,7 +35,10 @@ public class VisionSubsystem extends SubsystemBase {
     yaw = target.getYaw();
     area = target.getArea();
     ambiguity = target.getPoseAmbiguity();
-    xMeters = target.getBestCameraToTarget().getX(); // initially thought this should be getBestCameraToTarget,
+    xMeters =
+        target
+            .getBestCameraToTarget()
+            .getX(); // initially thought this should be getBestCameraToTarget,
     // but that didn't work
   }
 

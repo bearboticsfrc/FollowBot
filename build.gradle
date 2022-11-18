@@ -93,6 +93,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     testImplementation 'junit:junit:4.12'
+    implementation "com.jcraft:jsch:0.1.55"
 }
 
 // Simulation configuration (e.g. environment variables).

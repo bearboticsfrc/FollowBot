@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Follow;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.SoundSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 /*
@@ -30,6 +31,8 @@ public class RobotContainer {
 
   private final VisionSubsystem visionSubsystem;
 
+  private final SoundSubsystem sound;
+
   private final Follow followCommand;
   // The driver's controller
   private final XboxController driverController;
@@ -41,8 +44,9 @@ public class RobotContainer {
   public RobotContainer() {
     robotDrive = new DriveSubsystem();
     visionSubsystem = new VisionSubsystem();
+    sound = new SoundSubsystem();
     driverController = new XboxController(OIConstants.kDriverControllerPort);
-    followCommand = new Follow(robotDrive, visionSubsystem);
+    followCommand = new Follow(robotDrive, visionSubsystem, sound);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -81,6 +85,7 @@ public class RobotContainer {
 
     new JoystickButton(driverController, Button.kX.value).toggleWhenPressed(followCommand);
 
+    new JoystickButton(driverController, Button.kY.value).whenPressed(() -> sound.playSound1());
     new JoystickButton(driverController, Button.kA.value)
         .whenPressed(() -> robotDrive.zeroHeading());
 
