@@ -18,13 +18,14 @@ public class Follow extends CommandBase {
   private double xSpeed;
   private boolean stopped = true;
 
+
   private final Debouncer stoppedFilter = new Debouncer(0.10);
 
-  private final Debouncer debounceFilter = new Debouncer(0.25, DebounceType.kFalling);
+  private final Debouncer debounceFilter = new Debouncer(0.33, DebounceType.kFalling);
   private final ShuffleboardTab followTab = Shuffleboard.getTab("Follow Tab");
 
   private final PIDController yawPIDController = new PIDController(0.25, 0.001, 0);
-  private final PIDController xSpeedPIDController = new PIDController(0.1, 0, 0);
+  private final PIDController xSpeedPIDController = new PIDController(0.15, 0, 0);
 
   public Follow(
       DriveSubsystem driveSubsystem,
@@ -37,6 +38,8 @@ public class Follow extends CommandBase {
     followTab.addNumber("Traveled Distance: ", visionSubsystem::getDistance);
     followTab.addNumber("Target Yaw: ", visionSubsystem::getYaw);
     followTab.addNumber("xSpeed: ", this::getxSpeed);
+    followTab.add("yaw PID", yawPIDController);
+    followTab.add("xSpeed PID", xSpeedPIDController);
 
     addRequirements(driveSubsystem);
   }
@@ -61,12 +64,18 @@ public class Follow extends CommandBase {
   public void execute() {
     if (!debounceFilter.calculate(visionSubsystem.hasValidTargets())) {
       driveSubsystem.drive(0, 0, 0);
-      if (!stoppedFilter.calculate(stopped)) soundSubsystem.playSound2();
+
+      if (!stoppedFilter.calculate(stopped)) {
+        soundSubsystem.playSound2();
+      }
       stopped = true;
+      
       return;
     }
 
-    if (stoppedFilter.calculate(stopped)) soundSubsystem.playSound3();
+    if (stoppedFilter.calculate(stopped)) {
+      soundSubsystem.playSound3();
+    }
     stopped = false;
 
     double yaw = visionSubsystem.getYaw();

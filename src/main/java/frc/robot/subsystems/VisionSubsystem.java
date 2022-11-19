@@ -14,6 +14,7 @@ public class VisionSubsystem extends SubsystemBase {
   private boolean validTargets = false;
   private double xMeters = 0.0;
   private double ambiguity = 0.0;
+  private int fiducialId = -1;
 
   public VisionSubsystem() {
     camera = new PhotonCamera("mmal_service_16.1");
@@ -35,6 +36,8 @@ public class VisionSubsystem extends SubsystemBase {
     yaw = target.getYaw();
     area = target.getArea();
     ambiguity = target.getPoseAmbiguity();
+    fiducialId = target.getFiducialId();
+
     xMeters =
         target
             .getBestCameraToTarget()
@@ -43,7 +46,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   public boolean hasValidTargets() {
-    return validTargets && ambiguity < 0.2;
+    return validTargets && ambiguity < 0.2 && fiducialId == 0;
   }
 
   public double getPitch() {
@@ -56,6 +59,10 @@ public class VisionSubsystem extends SubsystemBase {
 
   public double getArea() {
     return area;
+  }
+
+  public int getFiducialId() {
+    return fiducialId;
   }
 
   /** returns distance in meters to best target. */
